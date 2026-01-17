@@ -1,0 +1,13 @@
+*{
+    background-color: rgb(204, 237, 176);
+}
+.title{
+    text-align: center;
+    font-family: cursive;
+}
+.box{
+    text-align: center;
+    border: 3px solid black;
+    padding: 15px;
+    border-radius: 20px;
+}
