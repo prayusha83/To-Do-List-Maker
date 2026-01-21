@@ -26,7 +26,8 @@ body {
     width: 360px;
     padding: 24px;
     border-radius: 24px;
-    /* horizontal, vertical, blur radius */
+    /* horizontal, vertical, blur radius, spread radius */
+    /* inset for shadow inside the element */
     box-shadow:
         0 12px 25px rgba(0, 0, 0, 0.08),
         inset 0 0 0 2px #f1e3d3;
@@ -59,11 +60,13 @@ body {
     color: #2f4f3e;
     font-weight: 500;
     cursor: pointer;
+    /* gentle animation */
     transition: all 0.2s ease;
 }
 /* when user is hovering with cursor */
 .input_task button:hover {
     background-color: #8bbfa6;
+    /* translateY so -:move up, +:move down */
     transform: translateY(-2px);
 }
 .task_list h3 {
