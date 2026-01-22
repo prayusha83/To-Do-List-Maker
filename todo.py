@@ -16,7 +16,7 @@ while(1):
             file= open("todo.txt", "a")
             file.write(f"[ ] {task}\n")
             file.close()
-            print("Task added successfully")
+            print("Task added sucbcessfully")
 
 
         case 2:
