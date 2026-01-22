@@ -19,10 +19,11 @@ button.addEventListener("click", function(){
     // console.log(tasks);
     list.innerHTML += `
         <li>
-            ${TaskText}
+            <span class="task-text">${TaskText}</span> 
+            <button class="edit">✏️</button>
             <button class="delete">×</button>
         </li>
-        `;
+        `; //span, not div cuz div wouldve made pen and x in new line
     input.value=""; //to clear tasks from input field after clicking add button
 });
 
@@ -36,10 +37,25 @@ If class doesn’t exist → add it */
 //     }
 // })
 
+
 list.addEventListener("click", function(event){
+
     if(event.target.classList.contains("delete")){
-        const li=event.target.parentElement; //means <li> for <button>
+        const li = event.target.parentElement; //means <li> for <button>
         li.remove(); //removing the parent element ie one task
+    }
+
+    if (event.target.classList.contains("edit")){
+        const li = event.target.parentElement;
+
+        // queryselector(.tasktext) --> inside THIS li, find the element with class task-text
+        const textSpan = li.querySelector(".task-text");
+
+        const newText = prompt("Edit your task:", textSpan.innerText);
+        if (newText !== null && newText.trim() !== "") {
+            textSpan.innerText = newText;
+        }
 
     }
-})
+});
+
