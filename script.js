@@ -6,14 +6,7 @@ button.addEventListener("click", function(){
     console.log("Add button clicked!");
 });
 
-// button.addEventListener("click", function(){
-//     const TaskText = input.value;
-//     console.log(TaskText);
-// });
-
-
 let tasks=[]
-
 button.addEventListener("click", function(){
     const TaskText = input.value;
     tasks.push(TaskText);
@@ -21,3 +14,12 @@ button.addEventListener("click", function(){
     list.innerHTML += `<li>${TaskText}</li>`;
     input.value=""; //to clear tasks from input field after clicking add button
 });
+
+/* toggle means:
+“If class exists → remove it
+If class doesn’t exist → add it */
+list.addEventListener("click", function(event){
+    if(event.target.tagName==="LI"){
+        event.target.classList.toggle("completed");
+    }
+})
