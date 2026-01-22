@@ -19,6 +19,7 @@ button.addEventListener("click", function(){
 “If class exists → remove it
 If class doesn’t exist → add it */
 list.addEventListener("click", function(event){
+    // event.target.tagName means if <tagname>(here LI) element is clicked
     if(event.target.tagName==="LI"){
         event.target.classList.toggle("completed");
     }
