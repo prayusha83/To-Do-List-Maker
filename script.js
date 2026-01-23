@@ -58,9 +58,22 @@ list.addEventListener("click", function (event) {
     // reads <li data-id="123"> and converts it to number.
 
     const task = tasks.find(t => t.id === taskId);
+    // for t in tasks:
+    // if t["id"] == taskId:
+    //     return t
+    // .find() returns the actual object, Not a copy, So modifying it changes the array.
+
+    // .filter():
+    // Loops through the array
+    // Keeps items that return true
+    // Removes items that return false
+    // Returns a new array
+
 
     if (event.target.classList.contains("delete")) {
         tasks = tasks.filter(t => t.id !== taskId);
+        // tasks = [t for t in tasks if t["id"] != taskId]
+        // Keep all tasks EXCEPT the one with this ID
         renderTasks();
         return;
     }
