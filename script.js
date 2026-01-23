@@ -8,6 +8,23 @@ button.addEventListener("click", function(){
 
 
 let tasks=[]
+
+function renderTasks() {
+    list.innerHTML = "";
+
+    //For each task object inside the tasks array
+    tasks.forEach(task => {
+        list.innerHTML += `
+            <li data-id="${task.id}" class="${task.completed ? "completed" : ""}">
+                <span class="task-text">${task.title}</span>
+                <button class="edit">✏️</button>
+                <button class="delete">×</button>
+            </li>
+        `;
+    });
+}
+
+
 button.addEventListener("click", function(){
     const TaskText = input.value;
 
@@ -15,47 +32,51 @@ button.addEventListener("click", function(){
         return;
     }
 
-    tasks.push(TaskText);
-    // console.log(tasks);
-    list.innerHTML += `
-        <li>
-            <span class="task-text">${TaskText}</span> 
-            <button class="edit">✏️</button>
-            <button class="delete">×</button>
-        </li>
-        `; //span, not div cuz div wouldve made pen and x in new line
+    const task = {
+        id: Date.now(),
+        title: TaskText,
+        completed: false
+    };
+
+    tasks.push(task);
+    renderTasks();
+
     input.value=""; //to clear tasks from input field after clicking add button
 });
 
-/* toggle means:
-“If class exists → remove it
-If class doesn’t exist → add it */
-// list.addEventListener("click", function(event){
-//     // event.target.tagName means if <tagname>(here LI) element is clicked
-//     if(event.target.tagName==="LI"){
-//         event.target.classList.toggle("completed");
-//     }
-// })
 
 
-list.addEventListener("click", function(event){
 
-    if(event.target.classList.contains("delete")){
-        const li = event.target.parentElement; //means <li> for <button>
-        li.remove(); //removing the parent element ie one task
+list.addEventListener("click", function (event) {
+
+    // Go up from what I clicked until you find the nearest <li>
+    const li = event.target.closest("li");
+    if (!li) return;
+
+    // <li data-id=...> to access that, we write dataset.id
+    const taskId = Number(li.dataset.id);
+    // reads <li data-id="123"> and converts it to number.
+
+    const task = tasks.find(t => t.id === taskId);
+
+    if (event.target.classList.contains("delete")) {
+        tasks = tasks.filter(t => t.id !== taskId);
+        renderTasks();
+        return;
     }
 
-    if (event.target.classList.contains("edit")){
-        const li = event.target.parentElement;
-
-        // queryselector(.tasktext) --> inside THIS li, find the element with class task-text
-        const textSpan = li.querySelector(".task-text");
-
-        const newText = prompt("Edit your task:", textSpan.innerText);
-        if (newText !== null && newText.trim() !== "") {
-            textSpan.innerText = newText;
+    if (event.target.classList.contains("edit")) {
+        const newText = prompt("Edit task:", task.title);
+        if (newText && newText.trim() !== "") {
+            task.title = newText.trim();
+            renderTasks();
         }
-
+        return;
     }
+
+    task.completed = !task.completed;
+        renderTasks();
+
 });
+
 
