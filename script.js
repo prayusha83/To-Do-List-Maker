@@ -7,7 +7,23 @@ button.addEventListener("click", function(){
 });
 
 
-let tasks=[]
+let tasks=[];
+// tasks is  [ { id: 1, title: "Study", completed: false } ]
+
+
+// save to local storage
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    // "[{"id":1,"title":"Study","completed":false}]", is string, not array
+}
+
+// load from local storage
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks"); //string
+    tasks = JSON.parse(savedTasks) || []; //parse the string to js
+    // {"id":1,"title":"Study","completed":false} will go in tasks
+    // if no savedtasks, [] ie empty array will be stored
+ }
 
 function renderTasks() {
     list.innerHTML = "";
@@ -39,6 +55,7 @@ button.addEventListener("click", function(){
     };
 
     tasks.push(task);
+    saveTasks();
     renderTasks();
 
     input.value=""; //to clear tasks from input field after clicking add button
@@ -74,6 +91,7 @@ list.addEventListener("click", function (event) {
         tasks = tasks.filter(t => t.id !== taskId);
         // tasks = [t for t in tasks if t["id"] != taskId]
         // Keep all tasks EXCEPT the one with this ID
+        saveTasks();
         renderTasks();
         return;
     }
@@ -82,14 +100,20 @@ list.addEventListener("click", function (event) {
         const newText = prompt("Edit task:", task.title);
         if (newText && newText.trim() !== "") {
             task.title = newText.trim();
+            saveTasks();
             renderTasks();
         }
         return;
     }
 
+    // Toggle completed state
     task.completed = !task.completed;
+        saveTasks();
         renderTasks();
 
 });
+
+loadTasks();
+renderTasks();
 
 
