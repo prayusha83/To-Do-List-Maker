@@ -1,68 +1,50 @@
-📝 JavaScript To-Do List App
+#  Task Nest
 
-A simple yet powerful To-Do List web application built using HTML, CSS, and Vanilla JavaScript.
-This project was built step-by-step to understand core JavaScript concepts, not just UI.
+A clean, Pinterest-inspired **to-do list web app** built using **HTML, CSS, and vanilla JavaScript**.
 
-✨ Features Implemented So Far
+This project was built step-by-step to deeply understand core JavaScript concepts instead of relying on frameworks.
 
-➕ Add new tasks
+---
 
-✅ Mark tasks as completed
+##  Features
 
-🗑️ Delete tasks
+- Add new tasks
+- Mark tasks as completed
+- Edit tasks
+- Delete tasks
+- Task counter (completed / total)
+- Empty state message
+- Tasks persist using **localStorage**
 
-✏️ Edit existing tasks
+---
 
-📦 Tasks stored as objects (not strings)
+##  Tech Stack
 
-🔁 UI updates dynamically (no page refresh)
+- HTML
+- CSS
+- JavaScript (Vanilla)
 
-🎨 Visual feedback for completed tasks
+---
 
-🛠️ Technologies Used
+## Concepts Practiced
 
-HTML – Structure
+- DOM manipulation
+- Event delegation
+- Arrays & objects
+- Central `renderTasks()` pattern
+- `localStorage`
+- Defensive programming
 
-CSS – Styling (Purple theme)
+---
 
-JavaScript (ES6) – Logic & Interactivity
+##  How to Run
 
-No frameworks. No libraries. Pure JavaScript.
+1. Download or clone the repo  
+2. Open `index.html` in your browser  
+3. Start managing tasks ✨
 
-📂 Project Structure
-todo-app/
-│
-├── index.html
-├── style.css
-├── script.js
-└── README.md
+---
 
-🚀 How to Run the Project
+##  Status
 
-Clone or download the repository
-
-Open index.html in your browser
-
-Start adding tasks 🎉
-
-No build steps required.
-
-📌 Current Status
-
-✔ Add task
-✔ Edit task
-✔ Delete task
-✔ Mark task as completed
-✔ Data stored as objects
-
-🔮 Upcoming Improvements
-
-Save tasks using localStorage
-
-Add due dates
-
-Filter completed / pending tasks
-
-Improve accessibility
-
-Convert to React (future)
+In active development as part of a **day-by-day JavaScript learning journey**.
