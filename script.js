@@ -1,36 +1,24 @@
 const input = document.getElementById("TaskInput");
 const button = document.getElementById("AddBtn");
 const list = document.getElementById("TaskList");
+const count = document.getElementById("TaskCount");
+const emptyMsg = document.getElementById("EmptyMessage");
 
 let tasks = [];
-// tasks is  [ { id: 1, title: "Study", completed: false } ]
-
-// save to local storage
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  // "[{"id":1,"title":"Study","completed":false}]", is string, not array
 }
 
-// load from local storage
 function loadTasks() {
-  const savedTasks = localStorage.getItem("tasks"); //string
-  tasks = JSON.parse(savedTasks) || []; //parse the string to js
-  // {"id":1,"title":"Study","completed":false} will go in tasks
-  // if no savedtasks, [] ie empty array will be stored
+  const savedTasks = localStorage.getItem("tasks");
+  tasks = JSON.parse(savedTasks) || []; 
 }
 
 function renderTasks() {
   list.innerHTML = "";
 
-  if (tasks.length === 0) {
-    list.innerHTML = `<li class="empty>No tasks yet!!! </li>`;
-    count.textContent = "0 tasks";
-    return;
-  }
-
   let completedCount = 0;
 
-  //For each task object inside the tasks array
   tasks.forEach((task) => {
     if (task.completed) completedCount++;
 
@@ -43,11 +31,16 @@ function renderTasks() {
         `;
   });
 
-  count.textContent = `${completedCount} / ${tasks.length} completed`;
+  if (tasks.length === 0) {
+    count.textContent = "";
+    emptyMsg.style.display = "block"; //block means element is visible
+  } else {
+    count.textContent = `${completedCount} / ${tasks.length} completed`;
+    emptyMsg.style.display = "none"; //none means element is hidden
+  }
 }
 
 input.addEventListener("input", function () {
-  // Disable button if input is empty or whitespace
   const userInput = input.value;
   const trimmedInput = userInput.trim();
   const isEmpty = trimmedInput === "";
@@ -60,9 +53,10 @@ input.addEventListener("input", function () {
 });
 
 button.addEventListener("click", function () {
-  const TaskText = input.value;
+  const TaskText = input.value.trim();
 
-  if (TaskText.trim() === "") {
+  if (TaskText === "") {
+    alert("Task cannot be empty!!");
     return;
   }
 
@@ -76,35 +70,20 @@ button.addEventListener("click", function () {
   saveTasks();
   renderTasks();
 
-  input.value = ""; //to clear tasks from input field after clicking add button
+  input.value = "";
   button.disabled = true;
 });
 
 list.addEventListener("click", function (event) {
-  // Go up from what I clicked until you find the nearest <li>
   const li = event.target.closest("li");
   if (!li) return;
 
-  // <li data-id=...> to access that, we write dataset.id
   const taskId = Number(li.dataset.id);
-  // reads <li data-id="123"> and converts it to number.
 
   const task = tasks.find((t) => t.id === taskId);
-  // for t in tasks:
-  // if t["id"] == taskId:
-  //     return t
-  // .find() returns the actual object, Not a copy, So modifying it changes the array.
-
-  // .filter():
-  // Loops through the array
-  // Keeps items that return true
-  // Removes items that return false
-  // Returns a new array
 
   if (event.target.classList.contains("delete")) {
     tasks = tasks.filter((t) => t.id !== taskId);
-    // tasks = [t for t in tasks if t["id"] != taskId]
-    // Keep all tasks EXCEPT the one with this ID
     saveTasks();
     renderTasks();
     return;
@@ -120,7 +99,6 @@ list.addEventListener("click", function (event) {
     return;
   }
 
-  // Toggle completed state
   task.completed = !task.completed;
   saveTasks();
   renderTasks();
