@@ -1,108 +1,43 @@
 const input = document.getElementById("TaskInput");
 const button = document.getElementById("AddBtn");
 const list = document.getElementById("TaskList");
-const count = document.getElementById("TaskCount");
-const emptyMsg = document.getElementById("EmptyMessage");
 
-let tasks = [];
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+// Fetch tasks from backend and render
+async function fetchTasks() {
+    const response = await fetch("http://127.0.0.1:8000/tasks");
+    const tasks = await response.json();
 
-function loadTasks() {
-  const savedTasks = localStorage.getItem("tasks");
-  tasks = JSON.parse(savedTasks) || []; 
-}
+    list.innerHTML = "";
 
-function renderTasks() {
-  list.innerHTML = "";
-
-  let completedCount = 0;
-
-  tasks.forEach((task) => {
-    if (task.completed) completedCount++;
-
-    list.innerHTML += `
-            <li data-id="${task.id}" class="${task.completed ? "completed" : ""}">
-                <span class="task-text">${task.title}</span>
-                <button class="edit">✏️</button>
-                <button class="delete">×</button>
+    tasks.forEach(task => {
+        list.innerHTML += `
+            <li class="${task.completed ? "completed" : ""}">
+                ${task.title}
             </li>
         `;
-  });
-
-  if (tasks.length === 0) {
-    count.textContent = "";
-    emptyMsg.style.display = "block"; //block means element is visible
-  } else {
-    count.textContent = `${completedCount} / ${tasks.length} completed`;
-    emptyMsg.style.display = "none"; //none means element is hidden
-  }
+    });
 }
 
-input.addEventListener("input", function () {
-  const userInput = input.value;
-  const trimmedInput = userInput.trim();
-  const isEmpty = trimmedInput === "";
+// Add task (POST to backend)
+button.addEventListener("click", async function () {
+    const text = input.value.trim();
+    if (text === "") 
+      return;
 
-  if (isEmpty) {
-    button.disabled = true;
-  } else {
-    button.disabled = false;
-  }
+    await fetch("http://127.0.0.1:8000/tasks", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: text,
+            completed: false
+        })
+    });
+
+    input.value = "";
+    fetchTasks(); // sync UI with backend
 });
 
-button.addEventListener("click", function () {
-  const TaskText = input.value.trim();
-
-  if (TaskText === "") {
-    alert("Task cannot be empty!!");
-    return;
-  }
-
-  const task = {
-    id: Date.now(),
-    title: TaskText,
-    completed: false,
-  };
-
-  tasks.push(task);
-  saveTasks();
-  renderTasks();
-
-  input.value = "";
-  button.disabled = true;
-});
-
-list.addEventListener("click", function (event) {
-  const li = event.target.closest("li");
-  if (!li) return;
-
-  const taskId = Number(li.dataset.id);
-
-  const task = tasks.find((t) => t.id === taskId);
-
-  if (event.target.classList.contains("delete")) {
-    tasks = tasks.filter((t) => t.id !== taskId);
-    saveTasks();
-    renderTasks();
-    return;
-  }
-
-  if (event.target.classList.contains("edit")) {
-    const newText = prompt("Edit task:", task.title);
-    if (newText && newText.trim() !== "") {
-      task.title = newText.trim();
-      saveTasks();
-      renderTasks();
-    }
-    return;
-  }
-
-  task.completed = !task.completed;
-  saveTasks();
-  renderTasks();
-});
-
-loadTasks();
-renderTasks();
+// Load tasks when page loads
+fetchTasks();
