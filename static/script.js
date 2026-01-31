@@ -11,8 +11,10 @@ async function fetchTasks() {
 
     tasks.forEach(task => {
         list.innerHTML += `
-            <li class="${task.completed ? "completed" : ""}">
-                ${task.title}
+            <li data-id="${task.id}" class="${task.completed ? "completed" : ""}">
+                <span class="task-text">${task.title}</span>
+                <button class="edit">✏️</button>
+                <button class="delete">🗑️</button>
             </li>
         `;
     });
@@ -37,6 +39,57 @@ button.addEventListener("click", async function () {
 
     input.value = "";
     fetchTasks(); // sync UI with backend
+});
+
+list.addEventListener("click", async (event) => {
+    const li = event.target.closest("li");
+    if (!li)
+        return;
+
+    const taskId = li.dataset.id;
+    const textSpan = li.querySelector(".task-text");
+
+    // DELETE
+    if (event.target.classList.contains("delete")) {
+        await fetch(`http://127.0.0.1:8000/tasks/${taskId}`, {
+            method: "DELETE"
+        });
+        fetchTasks();
+    }
+
+    // EDIT
+    if (event.target.classList.contains("edit")) {
+        const newText = prompt("Edit task:", textSpan.innerText);
+        if (!newText) 
+            return;
+
+        await fetch(`http://127.0.0.1:8000/tasks/${taskId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title: newText.trim(),
+                completed: li.classList.contains("completed")
+            })
+        });
+
+        fetchTasks();
+    }
+
+    // TOGGLE COMPLETE
+    if (event.target.tagName === "LI" || event.target.classList.contains("task-text")) {
+        const completed = !li.classList.contains("completed");
+
+        await fetch(`http://127.0.0.1:8000/tasks/${taskId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title: textSpan.innerText,
+                completed: completed
+            })
+        });
+
+        fetchTasks();
+    }
 });
 
 // Load tasks when page loads
