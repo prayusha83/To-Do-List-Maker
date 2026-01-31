@@ -1,39 +1,31 @@
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-import os
 from fastapi.middleware.cors import CORSMiddleware
-from models import Task
+from pydantic import BaseModel
+import database
 
 app = FastAPI()
 
-# Mount static folder (for CSS/JS)
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ["*"], #allow all for now
-    allow_credentials = True,
-    allow_methods = ["*"],
-    allow_headers = ["*"],
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Serve HTML file on home route
-@app.get("/", response_class=HTMLResponse)
-def home():
-    with open("templates/index.html") as f:
-        return f.read()
-    
+database.create_table()
 
-tasks = []
+
+class Task(BaseModel):
+    title: str
+    completed: bool = False
+
+
 @app.get("/tasks")
-def get_tasks():
-    return tasks
+def read_tasks():
+    return database.get_tasks()
 
 
 @app.post("/tasks")
-def add_tasks(task: Task):
-    # task object of Task class
-    task.id = len(tasks)+1
-    tasks.append(task)
-    return task
+def create_task(task: Task):
+    database.add_task(task.title)
+    return {"message": "Task added"}
