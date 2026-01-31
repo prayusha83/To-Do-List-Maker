@@ -66,8 +66,8 @@ def update_task(task_id, completed):
     cursor = conn.cursor()
 
     cursor.execute(
-        "UPDATE tasks SET completed = ? WHERE id = ?",
-        (int(completed), task_id)
+        "UPDATE tasks SET title = ?, completed = ? WHERE id = ?",
+        (title, int(completed), task_id)
     )
 
     conn.commit()
