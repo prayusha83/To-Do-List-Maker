@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import database
+import database  # means database.py
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -38,16 +38,36 @@ def read_tasks():
 
 @app.post("/tasks")
 def create_task(task: Task):
-    database.add_task(task.title)
-    return {"message": "Task added"}
+    if not task.title.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Task title cannot be empty"
+        )
+
+    database.add_task(task.title.strip())
+    return {"message": "Task added successfully"}
 
 @app.put("/tasks/{task_id}")
 def update_task(task_id: int, task: Task):
-    database.update_task(task_id, task.title, task.completed)
+    success = database.update_task(task_id, task.completed)
+
+    if not success:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+
     return {"message": "Task updated"}
 
 
 @app.delete("/tasks/{task_id}")
 def remove_task(task_id: int):
-    database.delete_task(task_id)
+    success = database.delete_task(task_id)
+
+    if not success:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+
     return {"message": "Task deleted"}
