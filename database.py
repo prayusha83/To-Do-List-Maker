@@ -1,4 +1,6 @@
 import sqlite3
+# import os
+# print("DB PATH:", os.path.abspath("tasks.db"))
 
 DB_NAME = "tasks.db"
 
@@ -66,12 +68,16 @@ def update_task(task_id, completed):
     cursor = conn.cursor()
 
     cursor.execute(
-        "UPDATE tasks SET title = ?, completed = ? WHERE id = ?",
-        (title, int(completed), task_id)
+        "UPDATE tasks SET  completed = ? WHERE id = ?",
+        ( int(completed), task_id)
     )
 
+    affected = cursor.rowcount
+    # 0 if task not found
     conn.commit()
     conn.close()
+
+    return affected > 0 
 
 
 def delete_task(task_id):
@@ -83,8 +89,11 @@ def delete_task(task_id):
         (task_id,)
     )
 
+    affected = cursor.rowcount
     conn.commit()
     conn.close()
+
+    return affected > 0
 
 
 
