@@ -26,7 +26,7 @@ function renderTasks() {
             <li data-id="${task.id}" class="${task.completed ? "completed" : ""}">
                 <span class="task-text">${task.title}</span>
                 <button class="edit">✏️</button>
-                <button class="delete">×</button>
+                <button class="delete">🗑️</button>
             </li>
         `;
   });
