@@ -1,50 +1,55 @@
-#  Task Nest
+# 🟣 Task Nest
 
-A clean, Pinterest-inspired **to-do list web app** built using **HTML, CSS, and vanilla JavaScript**.
+A clean, Pinterest-inspired **full-stack to-do application** built with **Vanilla JavaScript + FastAPI + SQLite**.
 
-This project was built step-by-step to deeply understand core JavaScript concepts instead of relying on frameworks.
+Task Nest was developed step-by-step to deeply understand how frontend and backend systems communicate without using frameworks or generators.
 
 ---
 
-##  Features
+## ✨ Features
 
-- Add new tasks
+- Add, edit, delete tasks
 - Mark tasks as completed
-- Edit tasks
-- Delete tasks
-- Task counter (completed / total)
-- Empty state message
-- Tasks persist using **localStorage**
+- Persistent storage with SQLite
+- RESTful API built using FastAPI
+- Input validation & error handling
+- Clean UI with a soft purple theme
 
 ---
 
-##  Tech Stack
+## 🧠 Tech Stack
 
+### Frontend
 - HTML
 - CSS
-- JavaScript (Vanilla)
+- Vanilla JavaScript
+
+### Backend
+- Python
+- FastAPI
+- Pydantic
+
+### Database
+- SQLite
 
 ---
 
-## Concepts Practiced
+## 🔌 API Endpoints
 
-- DOM manipulation
-- Event delegation
-- Arrays & objects
-- Central `renderTasks()` pattern
-- `localStorage`
-- Defensive programming
-
----
-
-##  How to Run
-
-1. Download or clone the repo  
-2. Open `index.html` in your browser  
-3. Start managing tasks ✨
+| Method | Route | Description |
+|------|------|-------------|
+| GET | `/tasks` | Fetch all tasks |
+| POST | `/tasks` | Add a new task |
+| PUT | `/tasks/{id}` | Update task (toggle/edit) |
+| DELETE | `/tasks/{id}` | Delete a task |
 
 ---
 
-##  Status
+## 🚀 Running Locally
 
-In active development as part of a **day-by-day JavaScript learning journey**.
+### 1. Install dependencies
+pip install fastapi uvicorn
+### Run the server
+uvicorn main:app --reload
+### Open in browser
+http://127.0.0.1:8000
