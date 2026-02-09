@@ -63,13 +63,13 @@ def add_task(title):
     conn.close()
 
 
-def update_task(task_id, completed):
+def update_task(task_id, title, completed):
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        "UPDATE tasks SET  completed = ? WHERE id = ?",
-        ( int(completed), task_id)
+        "UPDATE tasks SET title = ?, completed = ? WHERE id = ?",
+        (title, int(completed), task_id)
     )
 
     affected = cursor.rowcount
