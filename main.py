@@ -49,15 +49,20 @@ def create_task(task: Task):
 
 @app.put("/tasks/{task_id}")
 def update_task(task_id: int, task: Task):
-    success = database.update_task(task_id, task.completed)
+    if not task.title.strip():
+        raise HTTPException(status_code=400, detail="Task cannot be empty")
+
+    success = database.update_task(
+        task_id,
+        task.title.strip(),
+        task.completed
+    )
 
     if not success:
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+        raise HTTPException(status_code=404, detail="Task not found")
 
     return {"message": "Task updated"}
+
 
 
 @app.delete("/tasks/{task_id}")
